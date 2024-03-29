@@ -98,6 +98,17 @@ if (monster.position.y < 0) {
   monster.position.y = height;
 }
 
+if (player.position.x < 0) {
+  player.position.x = 0;
+} else if (player.position.x > width) {
+  player.position.x = width;
+}
+if (player.position.y < 0) {
+  player.position.y = 0;
+} else if (player.position.y > height) {
+  player.position.y = height;
+}
+
 
 //controls for the player
 //horizontal movement
