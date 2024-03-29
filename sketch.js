@@ -62,6 +62,8 @@ function lose() {
 function draw() { 
 //clear
   clear();
+//variable
+let mdistance = dist(player.x, player.y,monster.x,monster.y);
 //sets the player and monster to a fixed rotation.
 player.rotation = 0;
 monster.rotation = 45;
@@ -77,7 +79,7 @@ if (counter === 10) {
 counter = 0;
 
 
-for(let i=0; i < 11; i++){
+for(let i=0; i < 10; i++){
 let fod = new food.Sprite();
 }
 }
@@ -119,6 +121,8 @@ if (player.position.y < 0) {
   if(kb.pressing('w')) player.vel.y = -5;
   else if (kb.pressing('s')) player.vel.y = 5;
   else player.vel.y = 0;
+
+  
   
   
 }
