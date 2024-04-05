@@ -7,6 +7,7 @@ let food;
 let gems;
 let score = 0;
 let counter = 0;
+let bloat = 0;
 
 function setup() {
   // creates a canvas that fills the screen
@@ -28,23 +29,39 @@ food.amount = 10;
 monster = new Sprite();
 monster.x = 50;
 monster.y = 50;
+monster.img= 'assets/monster.png';
+monster.scale = 0.8;
 monster.color = color(255,0,0);
 monster.stroke = color(0,0,0,0);
 monster.width= 40;
 monster.height = 40;
 monster.overlaps(food);
-monster.vel.y = 5;
+monster.vel.y = 1;
 
+//fiend sprite
+fiend = new Sprite();
+fiend.x = 50;
+fiend.y = 50;
+fiend.img = 'assets/fiend.png';
+fiend.color = color(255,0,255);
+fiend.stroke = color(0,0,0,0);
+fiend.width = 60;
+fiend.height = 60;
+fiend.overlaps(monster);
+fiend.overlaps(food);
 
 //player sprite
 player = new Sprite();
 player.color = 'orange';
 player.stroke = color(0,0,0,0);
+player.img = 'assets/player.png';
+player.scale = 0.5;
 player.width = 30;
 player.height = 30;
 //calls functions nom and lose
 player.overlaps(food,nom);
 player.overlaps(monster,lose);
+player.overlaps(fiend,lose);
 }
 
 //when the player touches food: removes food and increases the score and counter
@@ -67,8 +84,9 @@ function draw() {
 
 
 //sets the player and monster to a fixed rotation.
-player.rotation = 0;
+
 monster.rotation = 45;
+fiend.roation = 0;
 //background color
 background(color(0,0,50));
 
@@ -80,29 +98,23 @@ text(score, 50, 50);
 if (counter === 10) {
 counter = 0;
 
+bloat++;
 
 for(let i=0; i < 10; i++){
 let fod = new food.Sprite();
 }
 }
+//Fiend code
+
+fiend.direction = fiend.angleTo(player);
+fiend.speed = 2;
 
 
+//Monster code
 
-let distance = dist(player.x, player.y, monster.x, monster.y);
+  monster.attractTo(player, 60);
+  monster.direction - monster.angleTo(player);
 
-
-if (distance > 500) {
-	
-  monster.attractTo(player, 10);
-  monster.direction = monster.angleTo(player);
-
-
-} else if (distance < 400) {
-  monster.direction;
-  monster.attractTo(player, 10);
-
- 
-}
 
  // Update monster position based on window boundaries //chatgpt
  if (monster.position.x < 0) {
