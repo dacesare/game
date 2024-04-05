@@ -62,13 +62,15 @@ function lose() {
 function draw() { 
 //clear
   clear();
-//variable
-let mdistance = dist(player.x, player.y,monster.x,monster.y);
+
+//variables
+
+
 //sets the player and monster to a fixed rotation.
 player.rotation = 0;
 monster.rotation = 45;
 //background color
-background(color(0,0,0));
+background(color(0,0,50));
 
 //text to display score
 textSize(18);
@@ -84,9 +86,23 @@ let fod = new food.Sprite();
 }
 }
 
-//monster code
-monster.attractTo(player, 40);
-monster.direction + monster.angleTo(player);
+
+
+let distance = dist(player.x, player.y, monster.x, monster.y);
+
+
+if (distance > 500) {
+	
+  monster.attractTo(player, 10);
+  monster.direction = monster.angleTo(player);
+
+
+} else if (distance < 400) {
+  monster.direction;
+  monster.attractTo(player, 10);
+
+ 
+}
 
  // Update monster position based on window boundaries //chatgpt
  if (monster.position.x < 0) {
