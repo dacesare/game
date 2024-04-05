@@ -18,8 +18,7 @@ function setup() {
 //food sprite
 //random code from p5play learn
 food = new Group();
-food.color = color(0,255,255);
-food.stroke = color(0,0,0,0);
+food.sprite = 'assets/food.png';
 food.d = 10;
 food.x = () => random(0,canvas.w);
 food.y = () => random(0,canvas.h);
