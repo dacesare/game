@@ -5,9 +5,9 @@
 let player;
 let food;
 let gems;
-let score = 0;
-let counter = 0;
-let approach = 0;
+let score = 9;
+let counter = 9;
+let approach = 9;
 let bloat = 0;
 
 function setup() {
@@ -61,7 +61,6 @@ player.height = 30;
 //calls functions nom and lose
 player.overlaps(food,nom);
 player.overlaps(monster,lose);
-player.overlaps(fiend,lose);
 }
 
 //when the player touches food: removes food and increases the score and counter
@@ -69,6 +68,7 @@ function nom(player,food) {
   food.remove();
   score++;
   counter++;
+  approach++;
 }
 //when the player touches monster: remove the player and destory the world
 function lose() {
@@ -86,7 +86,7 @@ function draw() {
 //sets the player and monster to a fixed rotation.
 
 monster.rotation = 45;
-fiend.roation = 0;
+
 //background color
 background(color(0,0,50));
 
@@ -104,11 +104,31 @@ for(let i=0; i < 10; i++){
 let fod = new food.Sprite();
 }
 }
+
+if (approach === 10) {
+
+  
+  fiend = new Sprite();
+  fiend.x = 50;
+  fiend.y = 50;
+  fiend.roation = 0;
+  fiend.img = 'assets/fiend.png';
+  fiend.color = color(255,0,255);
+  fiend.stroke = color(0,0,0,0);
+  fiend.width = 60;
+  fiend.height = 60;
+  fiend.overlaps(monster);
+  fiend.overlaps(food);
+  fiend.overlaps(player,lose);
+
+  approach = 11;
+
+
+}
 //Fiend code
 
 fiend.direction = fiend.angleTo(player);
 fiend.speed = 2;
-
 
 //Monster code
 
