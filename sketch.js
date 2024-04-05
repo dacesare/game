@@ -7,6 +7,7 @@ let food;
 let gems;
 let score = 0;
 let counter = 0;
+let approach = 0;
 let bloat = 0;
 
 function setup() {
