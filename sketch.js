@@ -1,70 +1,68 @@
 //used the starter p5play code.
 //used the p5play tutorial
 
-//intial varibles. 
+//intial varibles.
 let player;
 let food;
-let gems;
+let fiends;
 let score = 9;
 let counter = 9;
 let approach = 9;
 let bloat = 0;
+
 
 function setup() {
   // creates a canvas that fills the screen
   new Canvas();
   //initial varibles
 
+  //food sprite
+  //random code from p5play learn
+  food = new Group();
+  // Create multiple food sprites and add them to the food group
+  for (let i = 0; i < 10; i++) {
+    let singleFood = createSprite(random(0, width), random(0, height));
+    singleFood.addImage(loadImage("assets/food.png")); // Assuming p5.play's loadImage() function is available
+    singleFood.scale = 0.5; // Example scaling, adjust as needed
+    food.add(singleFood);
+  }
+  food.d = 10;
+  food.x = () => random(0, canvas.w);
+  food.y = () => random(0, canvas.h);
+  food.amount = 10;
 
-//food sprite
-//random code from p5play learn
-food = new Group();
-food.sprite = 'assets/food.png';
-food.d = 10;
-food.x = () => random(0,canvas.w);
-food.y = () => random(0,canvas.h);
-food.amount = 10;
+  //monster sprite
+  monster = new Sprite();
+  monster.x = 50;
+  monster.y = 50;
+  monster.img = "assets/monster.png";
+  monster.scale = 0.8;
+  monster.color = color(255, 0, 0);
+  monster.stroke = color(0, 0, 0, 0);
+  monster.width = 40;
+  monster.height = 40;
+  monster.overlaps(food);
+  monster.vel.y = 1;
 
-//monster sprite
-monster = new Sprite();
-monster.x = 50;
-monster.y = 50;
-monster.img= 'assets/monster.png';
-monster.scale = 0.8;
-monster.color = color(255,0,0);
-monster.stroke = color(0,0,0,0);
-monster.width= 40;
-monster.height = 40;
-monster.overlaps(food);
-monster.vel.y = 1;
+  //player sprite
+  player = new Sprite();
+  player.color = "orange";
+  player.stroke = color(0, 0, 0, 0);
+  player.img = "assets/player.png";
+  player.scale = 0.5;
+  player.width = 30;
+  player.height = 30;
+  //calls functions nom and lose
+  player.overlap(food, nom);
+  player.overlaps(monster, lose);
 
-//fiend sprite
-fiend = new Sprite();
-fiend.x = 50;
-fiend.y = 50;
-fiend.img = 'assets/fiend.png';
-fiend.color = color(255,0,255);
-fiend.stroke = color(0,0,0,0);
-fiend.width = 60;
-fiend.height = 60;
-fiend.overlaps(monster);
-fiend.overlaps(food);
+    //fiend sprite
+    fiends = new Group();
 
-//player sprite
-player = new Sprite();
-player.color = 'orange';
-player.stroke = color(0,0,0,0);
-player.img = 'assets/player.png';
-player.scale = 0.5;
-player.width = 30;
-player.height = 30;
-//calls functions nom and lose
-player.overlaps(food,nom);
-player.overlaps(monster,lose);
 }
 
 //when the player touches food: removes food and increases the score and counter
-function nom(player,food) {
+function nom(player, food) {
   food.remove();
   score++;
   counter++;
@@ -76,103 +74,90 @@ function lose() {
   world.gravity.y = 7;
 }
 
-function draw() { 
-//clear
+function draw() {
+  //clear
   clear();
 
-//variables
+  //variables
 
+  //sets the player and monster to a fixed rotation.
 
-//sets the player and monster to a fixed rotation.
+  // monster.rotation = 0;
 
-monster.rotation = 45;
+  //background color
+  background(color(0, 0, 50));
 
-//background color
-background(color(0,0,50));
+  //text to display score
+  textSize(18);
+  fill(255);
+  text(score, 50, 50);
+  //counter resets at 10, counted the same as score.
+  if (counter === 10) {
+    counter = 0;
 
-//text to display score
-textSize(18);
-fill(255);
-text(score, 50, 50);
-//counter resets at 10, counted the same as score.
-if (counter === 10) {
-counter = 0;
+    bloat++;
 
-bloat++;
+    for (let i = 0; i < 10; i++) {
+      let fod = new food.Sprite();
+    }
+  }
 
-for(let i=0; i < 10; i++){
-let fod = new food.Sprite();
-}
-}
+  if (approach === 10) {
+    let fiend = new fiends.Sprite();
+    fiend.x = 50;
+    fiend.y = 50;
+    fiend.roation = 0;
+    fiend.img = "assets/fiend.png";
+    fiend.color = color(255, 0, 255);
+    fiend.stroke = color(0, 0, 0, 0);
+    fiend.width = 60;
+    fiend.height = 60;
+    fiend.overlaps(monster);
+    fiend.overlaps(food);
+    fiend.overlaps(player, lose);
 
-if (approach === 10) {
+    approach = 11;
+  }
+  //Fiend code
 
-  
-  fiend = new Sprite();
-  fiend.x = 50;
-  fiend.y = 50;
-  fiend.roation = 0;
-  fiend.img = 'assets/fiend.png';
-  fiend.color = color(255,0,255);
-  fiend.stroke = color(0,0,0,0);
-  fiend.width = 60;
-  fiend.height = 60;
-  fiend.overlaps(monster);
-  fiend.overlaps(food);
-  fiend.overlaps(player,lose);
+  fiend.direction = fiend.angleTo(player);
+  fiend.speed = 2;
 
-  approach = 11;
-
-
-}
-//Fiend code
-
-fiend.direction = fiend.angleTo(player);
-fiend.speed = 2;
-
-//Monster code
+  //Monster code
 
   monster.attractTo(player, 60);
   monster.direction - monster.angleTo(player);
 
+  // Update monster position based on window boundaries //chatgpt
+  if (monster.position.x < 0) {
+    monster.position.x = 0;
+  } else if (monster.position.x > width) {
+    monster.position.x = width;
+  }
+  if (monster.position.y < 0) {
+    monster.position.y = 0;
+  } else if (monster.position.y > height) {
+    monster.position.y = height;
+  }
 
- // Update monster position based on window boundaries //chatgpt
- if (monster.position.x < 0) {
-  monster.position.x = 0;
-} else if (monster.position.x > width) {
-  monster.position.x = width;
-}
-if (monster.position.y < 0) {
-  monster.position.y = 0;
-} else if (monster.position.y > height) {
-  monster.position.y = height;
-}
+  if (player.position.x < 0) {
+    player.position.x = 0;
+  } else if (player.position.x > width) {
+    player.position.x = width;
+  }
+  if (player.position.y < 0) {
+    player.position.y = 0;
+  } else if (player.position.y > height) {
+    player.position.y = height;
+  }
 
-if (player.position.x < 0) {
-  player.position.x = 0;
-} else if (player.position.x > width) {
-  player.position.x = width;
-}
-if (player.position.y < 0) {
-  player.position.y = 0;
-} else if (player.position.y > height) {
-  player.position.y = height;
-}
-
-
-//controls for the player
-//horizontal movement
-  if (kb.pressing('a')) player.vel.x = -5;
-  else if (kb.pressing('d')) player.vel.x = 5;
+  //controls for the player
+  //horizontal movement
+  if (kb.pressing("a")) player.vel.x = -5;
+  else if (kb.pressing("d")) player.vel.x = 5;
   else player.vel.x = 0;
-//vertical movement
-  if(kb.pressing('w')) player.vel.y = -5;
-  else if (kb.pressing('s')) player.vel.y = 5;
+  //vertical movement
+  if (kb.pressing("w")) player.vel.y = -5;
+  else if (kb.pressing("s")) player.vel.y = 5;
   else player.vel.y = 0;
-
-  
-  
-  
 }
-
-
